@@ -1,0 +1,24 @@
+name: Validate reference
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run offline contract and documentation tests
+        run: python -m unittest discover -s tests -v
+      - name: Compile example Python files
+        run: python -m compileall -q examples tests
